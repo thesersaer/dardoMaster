@@ -223,6 +223,10 @@ class Game:
             self.advance_play()
         return True
 
+    #TODO: Add method to undo self.advance_play going back the necessary turns/rounds if any penalties considered
+    def undo_play(self):
+        pass
+
 
 def main():
     rules = CricketRules()
