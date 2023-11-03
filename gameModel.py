@@ -82,12 +82,21 @@ class Player:
 
 
 class CricketPlayer(Player):
+    available_numbers = {
+        key: True for key in definitions.cricket_scoring_numbers
+    }
+
     def __init__(self, rules: CricketRules, name: str = 'Player'):
         super(CricketPlayer, self).__init__(rules, name)
 
         self.numbers = {
             key: -3 for key in definitions.cricket_scoring_numbers
         }
+
+    @staticmethod
+    def reset_available_numbers():
+        for number in CricketPlayer.available_numbers:
+            CricketPlayer.available_numbers[number] = True
 
 
 class Rules:
@@ -98,23 +107,8 @@ class Rules:
 
 class CricketRules(Rules):
 
-    """
     @staticmethod
-    def get_player_score(player: CricketPlayer):
-        throw = player.dart_log[-1]
-        if throw.score in definitions.cricket_scoring_numbers:
-            if player.numbers[throw.score] < 3:
-                number_total = player.numbers[throw.score] + throw.modifier
-                if number_total <= 3:
-                    player.numbers[throw.score] = number_total
-                else:
-                    player.numbers[throw.score] = 3
-                    player.score += (number_total - 3) * throw.score
-            else:
-                player.score += throw.score * throw.modifier
-    """
-
-    @staticmethod
+    # TODO: Block scores once number is not available
     def get_player_score(player: CricketPlayer):
         numbers_buffer = player.numbers.copy()
         numbers_buffer = dict.fromkeys(numbers_buffer, -3)
@@ -131,12 +125,103 @@ class CricketRules(Rules):
         player.numbers = numbers_buffer
         player.score = score_buffer
 
+    @staticmethod
+    def check_winner(player_list: typing.List[CricketPlayer]):
+        winners = []
+        scores_maximum = max([player.score for player in player_list])
+        for index, player in enumerate(player_list):
+            score_condition = player.score == scores_maximum
+            numbers_condition = all([value >= 0 for value in player.numbers])
+            if score_condition and numbers_condition:
+                winners.append(index)
+        return winners
+
+    @staticmethod
+    def check_available_numbers(player_list: typing.List[CricketPlayer]):
+        for number in definitions.cricket_scoring_numbers:
+            closed_number = [player.numbers[number] >= 0 for player in player_list]
+            if all(closed_number):
+                CricketPlayer.available_numbers[number] = False
+
+
+class Score:
+    pass
+
+    def check_winner(self):
+        pass
+
+    def update_player_score(self, player_index: int):
+        pass
+
+
+class CricketScore(Score):
+    def __init__(self, player_list: typing.List[CricketPlayer]):
+        self.player_list = player_list
+
+        self.top_score = set()
+        self.all_numbers_closed = set()
+
+        self.closed_numbers = set()
+
+    def _check_top_score(self):
+        top_score = max([player.score for player in self.player_list])
+        self.top_score = set()
+
+        for player_index, player in enumerate(self.player_list):
+            if player.score == top_score:
+                if player_index not in self.top_score:
+                    self.top_score.add(player_index)
+
+    def _check_all_closed(self):
+        for player_index, player in enumerate(self.player_list):
+            for number in player.numbers.values():
+                if number < 0:
+                    break
+            else:
+                if player_index not in self.all_numbers_closed:
+                    self.all_numbers_closed.add(player_index)
+
+    def check_winner(self):
+        winners = self.top_score.intersection(self.all_numbers_closed)
+        if winners:
+            return True, winners
+        else:
+            return False
+
+    def _check_closed_numbers(self):
+        for number in definitions.cricket_scoring_numbers:
+            for player in self.player_list:
+                if player.numbers[number] < 0:
+                    break
+            else:
+                if number not in self.closed_numbers:
+                    self.closed_numbers.add(number)
+
+    def update_player_numbers_from_last_throw(self, player_index: int):
+        player = self.player_list[player_index]
+        throw = player.throw_log[-1]
+        if throw.score in definitions.cricket_scoring_numbers:
+            if player.numbers[throw.score] < 0:
+                player.numbers[throw.score] += 1
+            else:
+                if throw.score not in self.closed_numbers:
+                    player.numbers[throw.score] += 1
+
+    def update_player_score(self, player_index: int):
+        player = self.player_list[player_index]
+        score_buffer = 0
+        for key, value in player.numbers.items():
+            if value > 0:
+                score_buffer += key * value
+        player.score = score_buffer
+
 
 class Game:
     def __init__(self, players: typing.List[Player]):
         self.turn = 0
         self.round = 0
         self.players: typing.List[Player] = players
+        self.turns_skipped = 0
 
     def add_throw(self, throw: Throw, player_position: int):
         player = self.players[player_position]
@@ -207,24 +292,14 @@ class Game:
             return self.undo_turn()
         return self.undo_turn()
 
-    def advance_play(self):
-        player = self.players[self.turn]
-        if not player.has_remaining_throws():
-            if not self.next_turn():
-                if not self.next_round():
-                    return False
-                else:
-                    self.reset_throw_count()
 
-        player = self.players[self.turn]
-        if player.has_penalty():
-            player.penalty_rounds -= 1
-            player.throws = 0
-            self.advance_play()
-        return True
+class GameManager:
+    def __init__(self, game: Game):
+        self.game = game
 
-    #TODO: Add method to undo self.advance_play going back the necessary turns/rounds if any penalties considered
-    def undo_play(self):
+        self.started = False
+
+    def start_game(self):
         pass
 
 
