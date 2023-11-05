@@ -31,6 +31,7 @@ class Player:
         self.throws = 3
         self.score = 0
         self.throw_log: typing.List[Throw] = []
+        self.numbers = None
 
     def has_penalty(self):
         return self.penalty_rounds > 0
@@ -331,65 +332,6 @@ class GameManager:
 
     def undo_round(self):
         return self.game.undo_round()
-
-
-def main():
-    p1 = CricketPlayer('P1')
-    p2 = CricketPlayer('P2')
-
-    game = Game([p1, p2], CricketScore)
-    game_manager = GameManager(game)
-
-    t1 = Throw(15, 1)
-    t2 = Throw('f')
-    t3 = Throw(15, 3)
-
-    t4 = Throw(17, 2)
-    t5 = Throw('o')
-    t6 = Throw(25)
-
-    t7 = Throw(25, 2)
-    t8 = Throw('f')
-    t9 = Throw(15, 3)
-
-    t10 = Throw(16, 2)
-
-    tl = [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10]
-
-    game_manager.start_game()
-
-    game_manager.add_throw(t1)
-    game_manager.add_throw(t2)
-    game_manager.add_throw(t3)
-
-    game_manager.next_turn()
-    game_manager.add_throw(t2)
-    game_manager.add_throw(t4)
-    game_manager.add_throw(t5)
-
-    game_manager.next_turn()
-    game_manager.add_throw(t6)
-    game_manager.add_throw(t7)
-    game_manager.add_throw(t9)
-
-    game_manager.next_turn()
-    game_manager.undo_turn()
-
-    input('END')
-
-
-def main2():
-    p1 = Player('P1')
-    t1 = Throw(15, 2)
-    t2 = Throw(15, 2)
-    t3 = Throw('f')
-    t4 = Throw('f')
-    t5 = Throw(17)
-    p1.add_throw(t1)
-    p1.add_throw(t4)
-    p1.add_throw(t2)
-    r = p1.remove_throw(t3)
-    input('END')
 
 
 def main3():
