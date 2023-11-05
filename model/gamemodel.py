@@ -1,6 +1,6 @@
 from __future__ import annotations
 import typing
-import definitions
+import model.definitions
 
 
 class Throw:
@@ -43,7 +43,7 @@ class Player:
         if self.throws > 0:
             self.throw_log.append(throw)
             if throw.foul:
-                self.penalty_rounds += definitions.foul_penalty_rounds
+                self.penalty_rounds += model.definitions.foul_penalty_rounds
             self.throws -= 1
             return True
         return False
@@ -83,14 +83,14 @@ class Player:
 
 class CricketPlayer(Player):
     available_numbers = {
-        key: True for key in definitions.cricket_scoring_numbers
+        key: True for key in model.definitions.cricket_scoring_numbers
     }
 
     def __init__(self, name: str = 'Player'):
         super(CricketPlayer, self).__init__(name)
 
         self.numbers = {
-            key: -3 for key in definitions.cricket_scoring_numbers
+            key: -3 for key in model.definitions.cricket_scoring_numbers
         }
 
     @staticmethod
@@ -153,7 +153,7 @@ class CricketScore(Score):
             return False, []
 
     def _check_closed_numbers(self):
-        for number in definitions.cricket_scoring_numbers:
+        for number in model.definitions.cricket_scoring_numbers:
             for player in self.player_list:
                 if player.numbers[number] < 0:
                     break
@@ -165,7 +165,7 @@ class CricketScore(Score):
         player = self.player_list[player_index]
         try:
             throw = player.throw_log[-1]
-            if throw.score in definitions.cricket_scoring_numbers:
+            if throw.score in model.definitions.cricket_scoring_numbers:
                 player_number = player.numbers[throw.score]
 
                 if throw.score in self.closed_numbers and player_number < 0:
