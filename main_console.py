@@ -46,6 +46,7 @@ class CricketConsole:
     def console_entry(self):
         entry = input('\\>')
         if entry == 'undo':
+            # FIXME: Fix scoring when undoing e.g. 2x 15x3 then undo adds instead of removing score
             self.game_manager.undo_throw()
         elif entry == 'undo turn':
             self.game_manager.undo_turn()
