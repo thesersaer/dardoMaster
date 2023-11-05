@@ -1,9 +1,9 @@
 import os
-import gamemodel
+import model.gamemodel
 
 
 class CricketConsole:
-    def __init__(self, game_manager: gamemodel.GameManager):
+    def __init__(self, game_manager: model.gamemodel.GameManager):
         self.game_manager = game_manager
 
     def update(self):
@@ -59,9 +59,9 @@ class CricketConsole:
                         modif = int(throw_info[1])
                     except IndexError:
                         modif = 1
-                    throw = gamemodel.Throw(int(throw_info[0]), modif)
+                    throw = model.gamemodel.Throw(int(throw_info[0]), modif)
                 else:
-                    throw = gamemodel.Throw(entry)
+                    throw = model.gamemodel.Throw(entry)
 
                 if self.game_manager.add_throw(throw):
                     self.game_manager.next_turn()
@@ -86,11 +86,11 @@ if __name__ == '__main__':
 
     player_list = []
     for ii_player in range(number_of_players):
-        player_list.append(gamemodel.CricketPlayer(sys.argv[2 + ii_player]))
+        player_list.append(model.gamemodel.CricketPlayer(sys.argv[2 + ii_player]))
 
-    game = gamemodel.Game(player_list, gamemodel.CricketScore)
+    game = model.gamemodel.Game(player_list, model.gamemodel.CricketScore)
 
-    manager = gamemodel.GameManager(game)
+    manager = model.gamemodel.GameManager(game)
 
     console = CricketConsole(manager)
 
