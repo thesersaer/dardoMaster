@@ -1,5 +1,6 @@
 # dardoMaster
-Aplicación en Python para registrar partidas de dardos. En su estado actual es compatible con los juegos:
+Aplicación en Python para registrar partidas de dardos. 
+En su estado actual es compatible con los juegos:
 
 - Cricket
 
@@ -23,7 +24,8 @@ Aplicación en Python para registrar partidas de dardos. En su estado actual es 
 El programa muestra (de arriba a abajo):
 - Tabla de puntuaciones: NOMBRE_JUGADOR (PUNTOS) {NÚMEROS}
 
-Por defecto todos los números están en -3. Al llegar a 0 se abre el número y si todos los jugadores tienen 0 (o más) en algún número este se cierra y deja de dar puntos.
+Por defecto todos los números están en -3.
+Al llegar a 0 se abre el número y si todos los jugadores tienen 0 (o más) en algún número este se cierra y deja de dar puntos.
 
 - Número de ronda
 - Turno
@@ -40,4 +42,5 @@ El programa admite ciertas entradas / comandos:
 - "f": registra una tirada nula (fuera de la diana). Se aplica una penalización para los próximos `2` turnos (modificable en `model/definitions.py`).
 - ***Enter***: Avanza el turno. Sólo disponible si se han registrado todos los tiros del turno actual (3).
 
-El juego finaliza cuando cualquier jugador tenga todos los números cerrados (>=0) y tenga la máxima puntuación de la partida. Para abandonar el juego, presionar ***Ctrl + z***.
+El juego finaliza cuando cualquier jugador tenga todos los números cerrados (>=0) y tenga la máxima puntuación de la partida. 
+Para abandonar el juego, presionar ***Ctrl + z***.
