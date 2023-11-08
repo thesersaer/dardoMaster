@@ -57,7 +57,15 @@ class CricketConsole:
         else:
             parsed_entry = entry.split(',')
             if len(parsed_entry) > 1:
-                self.game_manager.add_throw(int(parsed_entry[0]), int(parsed_entry[1]))
+                score = int(parsed_entry[0])
+                modifier = int(parsed_entry[1])
+                if modifier >= 3:
+                    if score == 25:
+                        modifier = 2
+                    else:
+                        modifier = 3
+
+                self.game_manager.add_throw(score, modifier)
             else:
                 score = parsed_entry[0]
                 try:
