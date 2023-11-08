@@ -25,7 +25,9 @@ El programa muestra (de arriba a abajo):
 - Tabla de puntuaciones: NOMBRE_JUGADOR (PUNTOS) {NÚMEROS}
 
 Por defecto todos los números están en -3.
-Al llegar a 0 se abre el número y si todos los jugadores tienen 0 (o más) en algún número este se cierra y deja de dar puntos.
+Cada acierto suma un punto a su respectivo número.
+Los aciertos a números puntuan a partir de 0 (número se "abre").
+Si todos los jugadores tienen el mismo número "abierto" se cierra y deja de puntuar.
 
 - Número de ronda
 - Turno
@@ -34,13 +36,22 @@ Al llegar a 0 se abre el número y si todos los jugadores tienen 0 (o más) en a
 ## Cómo jugar
 
 El programa admite ciertas entradas / comandos:
-- "undo": deshace la última tirada. Si no se han hecho tiradas en el turno, deshace el turno.
-- "NÚMERO": registra una tirada según el número acertado (p.ej. "15" o "3").
-- "NÚMERO, 2": ídem, número doble (p.ej. "15, 2" o "3,2").
-- "NÚMERO, 3": ídem, número triple.
-- "o": registra una tirada acertada (dentro de la diana) que no ha dado a ningún número.
-- "f": registra una tirada nula (fuera de la diana). Se aplica una penalización para los próximos `2` turnos (modificable en `model/definitions.py`).
-- ***Enter***: Avanza el turno. Sólo disponible si se han registrado todos los tiros del turno actual (3).
+
+- "undo": deshace la última tirada. Si no se han hecho tiradas en el turno, deshace el turno
+- "NÚMERO": registra una tirada según el número acertado (p.ej. "15" o "3")
+- "NÚMERO, 2": ídem, número doble (p.ej. "15, 2" o "3,2")
+- "NÚMERO, 3": ídem, número triple
+- "o": registra una tirada acertada (dentro de la diana) que no ha dado a ningún número
+- "f": registra una tirada nula (fuera de la diana). Se aplica una penalización para los próximos `2` turnos (modificable en `model/definitions.py`)
+- ***Enter***: Avanza el turno. Sólo disponible si se han registrado todos los tiros del turno actual (3)
 
 El juego finaliza cuando cualquier jugador tenga todos los números cerrados (>=0) y tenga la máxima puntuación de la partida. 
 Para abandonar el juego, presionar ***Ctrl + z***.
+
+## Parámetros
+
+Los parámetros de juego se pueden modificar en `model/definitions.py`.
+### Generales
+- `foul_penalty_turns`: Turnos de penalización que se aplican a un jugador al registrar una tirada nula
+### Cricket
+- `cricket_scoring_numbers`: Números validos de Cricket
