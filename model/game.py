@@ -30,8 +30,9 @@ class Game:
         if self.turn > 0:
             self.turn -= 1
         else:
-            self.turn = len(self.player_list) - 1
-            self.round -= 1
+            if self.round > 0:
+                self.turn = len(self.player_list) - 1
+                self.round -= 1
 
     def add_player_throw(self, score: typing.Union[str, int], modifier: int = 1, valid: bool = True):
         if self.current_player.add_throw(score, modifier, valid):
