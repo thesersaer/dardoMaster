@@ -6,7 +6,7 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__)).strip('\\model')
 
 dartboard_numbers = [number for number in range(1, 21, 1)]
 
-foul_penalty_rounds = 2
+foul_penalty_turns = 2
 
 min_players = 2
 

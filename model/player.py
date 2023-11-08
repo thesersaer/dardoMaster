@@ -63,7 +63,7 @@ class Player:
         if self.has_throws_left() and self.no_penalty():
             throw = th.Throw(score, modifier, valid)
             if throw.foul:
-                self._penalty_rounds += model.definitions.foul_penalty_rounds
+                self._penalty_rounds += model.definitions.foul_penalty_turns
             self._throw_log.append(throw)
             self._throws -= 1
             return True
@@ -73,7 +73,7 @@ class Player:
         if self.has_thrown() and self._throw_log:
             throw = self._throw_log.pop()
             if throw.foul:
-                self._penalty_rounds -= model.definitions.foul_penalty_rounds
+                self._penalty_rounds -= model.definitions.foul_penalty_turns
             self._throws += 1
             return throw
         return False
